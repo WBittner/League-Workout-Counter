@@ -13,6 +13,7 @@ var moreBase = "api/lol/";
 var numDeaths = 0;
 var numKills = 0;
 var numAssists = 0;
+var win = true;
 	
 function getLeagueInfo()
 {
@@ -47,16 +48,47 @@ function getLeagueInfo()
 		numDeaths =temp.games[0].stats.numDeaths;
 		numKills =temp.games[0].stats.championsKilled;
 		numAssists =temp.games[0].stats.assists;
+		win = temp.games[0].stats.win;
 		
-		displayLeagueInfo();
+		//displayLeagueInfo();
 	}
 	else
 		document.getElementById("text").innerHTML = nope;
 	
 }
 
+function displayLeagueInfoSoft()
+{
+	document.getElementById("text").innerHTML = ("Num kills: " +numKills +"\nNum deaths:" +
+			numDeaths + "\nNum assists: " + numAssists);
+	
+	if(win)
+	{
+		document.getElementById("pushups").innerHTML = (numDeaths*3)-(numKills*2)-(numAssists);
+		document.getElementById("crunches").innerHTML = (numDeaths*3)-(numKills*2)-(numAssists);		
+	}
+}
+
 function displayLeagueInfo()
 {
 	document.getElementById("text").innerHTML = ("Num kills: " +numKills +"\nNum deaths:" +
 			numDeaths + "\nNum assists: " + numAssists);
+	
+	if(win)
+	{
+		document.getElementById("pushups").innerHTML = (numDeaths*5)-(numKills*2)-(numAssists);
+		document.getElementById("crunches").innerHTML = (numDeaths*5)-(numKills*2)-(numAssists);		
+	}
+}
+
+function displayLeagueInfoHard()
+{
+	document.getElementById("text").innerHTML = ("Num kills: " +numKills +"\nNum deaths:" +
+			numDeaths + "\nNum assists: " + numAssists);
+	
+	if(win)
+	{
+		document.getElementById("pushups").innerHTML = (numDeaths*5)-(numKills)-(numAssists);
+		document.getElementById("crunches").innerHTML = (numDeaths*5)-(numKills)-(numAssists);		
+	}
 }
