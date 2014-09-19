@@ -47,12 +47,16 @@ function getLeagueInfo()
 		numDeaths =temp.games[0].stats.numDeaths;
 		numKills =temp.games[0].stats.championsKilled;
 		numAssists =temp.games[0].stats.assists;
-				
-				
-		document.getElementById("text").innerHTML = ("Num kills: " +numKills +"\nNum deaths:" +
-				numDeaths + "\nNum assists: " + numAssists);
+		
+		displayLeagueInfo();
 	}
 	else
 		document.getElementById("text").innerHTML = nope;
 	
+}
+
+function displayLeagueInfo()
+{
+	document.getElementById("text").innerHTML = ("Num kills: " +numKills +"\nNum deaths:" +
+			numDeaths + "\nNum assists: " + numAssists);
 }
