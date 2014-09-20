@@ -83,6 +83,11 @@ function displayLeagueInfoSoft()
 		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*3)-(numKills*2)-(numAssists));
 		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*3)-(numKills*2)-(numAssists));		
 	}
+	if(!win)
+	{
+		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*((numDeaths*3)-(numKills*2)-(numAssists));
+		document.getElementById("crunches").innerHTML = "Crunches: " +1.5*((numDeaths*3)-(numKills*2)-(numAssists));		
+	}
 }
 
 function displayLeagueInfo()
@@ -95,6 +100,12 @@ function displayLeagueInfo()
 		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*5)-(numKills*2)-(numAssists));
 		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*5)-(numKills*2)-(numAssists));		
 	}
+	
+	if(!win)
+	{
+		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*((numDeaths*5)-(numKills*2)-(numAssists));
+		document.getElementById("crunches").innerHTML = "Crunches: " + 1.5*((numDeaths*5)-(numKills*2)-(numAssists));		
+	}
 }
 
 function displayLeagueInfoHard()
@@ -106,6 +117,12 @@ function displayLeagueInfoHard()
 	{
 		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*5)-(numKills)-(numAssists));
 		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*5)-(numKills)-(numAssists));		
+	}
+	
+	if(!win)
+	{
+		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*((numDeaths*5)-(numKills*1)-(numAssists));
+		document.getElementById("crunches").innerHTML = "Crunches: " +1.5*((numDeaths*5)-(numKills*1)-(numAssists));		
 	}
 }
 
