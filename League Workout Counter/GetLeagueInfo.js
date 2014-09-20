@@ -64,8 +64,8 @@ function displayLeagueInfoSoft()
 	
 	if(win)
 	{
-		document.getElementById("pushups").innerHTML = (numDeaths*3)-(numKills*2)-(numAssists);
-		document.getElementById("crunches").innerHTML = (numDeaths*3)-(numKills*2)-(numAssists);		
+		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*3)-(numKills*2)-(numAssists));
+		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*3)-(numKills*2)-(numAssists));		
 	}
 }
 
@@ -76,8 +76,8 @@ function displayLeagueInfo()
 	
 	if(win)
 	{
-		document.getElementById("pushups").innerHTML = (numDeaths*5)-(numKills*2)-(numAssists);
-		document.getElementById("crunches").innerHTML = (numDeaths*5)-(numKills*2)-(numAssists);		
+		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*5)-(numKills*2)-(numAssists));
+		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*5)-(numKills*2)-(numAssists));		
 	}
 }
 
@@ -88,7 +88,7 @@ function displayLeagueInfoHard()
 	
 	if(win)
 	{
-		document.getElementById("pushups").innerHTML = (numDeaths*5)-(numKills)-(numAssists);
-		document.getElementById("crunches").innerHTML = (numDeaths*5)-(numKills)-(numAssists);		
+		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*5)-(numKills)-(numAssists));
+		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*5)-(numKills)-(numAssists));		
 	}
 }
