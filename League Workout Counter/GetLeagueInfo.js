@@ -14,6 +14,8 @@ var numDeaths = 0;
 var numKills = 0;
 var numAssists = 0;
 var win = true;
+var champID = 0;
+var date;
 	
 function getLeagueInfo()
 {
@@ -49,17 +51,31 @@ function getLeagueInfo()
 		numKills =temp.games[0].stats.championsKilled;
 		numAssists =temp.games[0].stats.assists;
 		win = temp.games[0].stats.win;
+		champID = temp.games[0].championId;		
+		date = EMtoMD(temp.games[0].createDate);
 		
-		//displayLeagueInfo();
+		alert(date);
+		
+		//todo
+		//checkPreviousGames();
 	}
 	else
 		document.getElementById("text").innerHTML = nope;
 	
 }
+//turns epoch milliseconds date into mon/day date
+function EMtoMD(t)
+{
+	var d = new Date(0);
+	d.setUTCMilliseconds(t);
+	d = d.toString().split(" ");
+	d = d[1]+ "/" +d[2];
+	return d;
+}
 
 function displayLeagueInfoSoft()
 {
-	document.getElementById("text").innerHTML = ("Num kills: " +numKills +"\nNum deaths:" +
+	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" +
 			numDeaths + "\nNum assists: " + numAssists);
 	
 	if(win)
@@ -71,7 +87,7 @@ function displayLeagueInfoSoft()
 
 function displayLeagueInfo()
 {
-	document.getElementById("text").innerHTML = ("Num kills: " +numKills +"\nNum deaths:" +
+	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" +
 			numDeaths + "\nNum assists: " + numAssists);
 	
 	if(win)
@@ -83,7 +99,7 @@ function displayLeagueInfo()
 
 function displayLeagueInfoHard()
 {
-	document.getElementById("text").innerHTML = ("Num kills: " +numKills +"\nNum deaths:" +
+	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" +
 			numDeaths + "\nNum assists: " + numAssists);
 	
 	if(win)
@@ -91,4 +107,9 @@ function displayLeagueInfoHard()
 		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*5)-(numKills)-(numAssists));
 		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*5)-(numKills)-(numAssists));		
 	}
+}
+
+function displayChamp()
+{
+	
 }
