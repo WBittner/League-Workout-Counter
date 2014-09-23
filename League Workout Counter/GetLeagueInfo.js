@@ -5,24 +5,27 @@
 
 var key = "?api_key=6664f4db-4da8-4d3b-a858-20dc58175f06";
 var region = "na/";
-var version = "v1.4/"
+var version = "v1.4/";
+var mhversion = "v1.3/";
 var summonerName = "";
 var id = 0;
-var urlBase = "https://na.api.pvp.net/"
+var urlBase = "https://na.api.pvp.net/";
 var moreBase = "api/lol/";
+var mh = "";
 var numDeaths = 0;
 var numKills = 0;
 var numAssists = 0;
 var win = true;
 var champID = 0;
 var date;
+var prevCrunches;
+var champs = [""]
 	
 function getLeagueInfo()
 {
 	summonerName = "si1v3r";
-
-	var fullURL = urlBase + moreBase+ region + version + "summoner/by-name/" 
-	+ summonerName + key;
+	
+	var fullURL = urlBase + moreBase+ region + version + "summoner/by-name/" + summonerName + key;
 	//access API for summoner info 
 	
 	
@@ -34,19 +37,17 @@ function getLeagueInfo()
 	if(client.status==200){
 		//get id
 		var strJSON = client.responseText;
-		//document.getElementById("text").innerHTML = strJSON;
 		var temp = JSON.parse(strJSON);
 		id = temp.si1v3r.id;
 		
-		var mhURL = "https://na.api.pvp.net/api/lol/na/v1.3/game/by-summoner/28901069/recent?api_key=6664f4db-4da8-4d3b-a858-20dc58175f06";
-		
 		//use ID for match history
+		mhURL = urlBase + moreBase + region + mhversion + "game/by-summoner/" + id + "/recent" + key;
 		client.open("GET", mhURL, false);
 		client.send();
 		strJSON = client.responseText;
 		temp = JSON.parse(strJSON);
 		
-			
+		//use json to parse through and get stats
 		numDeaths =temp.games[0].stats.numDeaths;
 		numKills =temp.games[0].stats.championsKilled;
 		numAssists =temp.games[0].stats.assists;
@@ -54,16 +55,51 @@ function getLeagueInfo()
 		champID = temp.games[0].championId;		
 		date = EMtoMD(temp.games[0].createDate);
 		
-		alert(date);
-		
-		//todo
-		//checkPreviousGames();
 	}
-	else
+	else//incase the API status is bad
 		document.getElementById("text").innerHTML = nope;
 	
-}
-//turns epoch milliseconds date into mon/day date
+	//set onclick for the buttons to display 
+	document.getElementById("soft").setAttribute("onclick", "displayInfo(3,2,1)");
+	document.getElementById("med").setAttribute("onclick", "displayInfo(5,2,1)");
+	document.getElementById("hard").setAttribute("onclick", "displayInfo(5,1,1)");
+	
+	//display pic of most recent games champ
+	displayChamp(champID);
+}//end getLeagueInfo
+
+//checks for any previous games on the same day, then adds their total crunches to the variable prevCrunches
+function checkPreviousGames(prevGameTotal,dmod,kmod,amod)
+{
+	prevCrunches = 0;
+	var mhclient = new XMLHttpRequest();
+	mhclient.open("GET", mhURL, false);
+	mhclient.send();
+	var strJSON = mhclient.responseText;
+	var temp = JSON.parse(strJSON);
+	var gameDate = EMtoMD(temp.games[prevGameTotal].createDate);
+	
+	//base case - if the game doesn't equal the most recent games date we're done!
+	if(gameDate!=date)
+		return;
+	else
+	{
+		var tnumDeaths = 0;
+		var tnumKills = 0;
+		var tnumAssists = 0;
+		tnumDeaths =temp.games[prevGameTotal].stats.numDeaths;
+		tnumKills =temp.games[prevGameTotal].stats.championsKilled;
+		tnumAssists =temp.games[prevGameTotal].stats.assists;
+		
+		//we don't want to subtract crunches if its negative - no backsies!
+		var subtotal = tnumDeaths*dmod -tnumKills*kmod - tnumAssists*amod;
+		if(subtotal>0)
+			prevCrunches+= subtotal;
+		return;
+	}
+}//end checkPreviousGames
+
+//turns epoch milliseconds date into mon/day string
 function EMtoMD(t)
 {
 	var d = new Date(0);
@@ -71,62 +107,41 @@ function EMtoMD(t)
 	d = d.toString().split(" ");
 	d = d[1]+ "/" +d[2];
 	return d;
-}
+}//end EMtoMD
 
-function displayLeagueInfoSoft()
+//displays the number of pushups/crunches you must do, as well as your most recent games date and KDA
+function displayInfo(dmod,kmod,amod)
 {
-	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" +
-			numDeaths + "\nNum assists: " + numAssists);
+	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" + numDeaths + "\nNum assists: " + numAssists);
+	
+	checkPreviousGames(1,dmod,kmod,amod);
+	
+	var subtotalP = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod);
+	var subtotalCwin = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod)+ prevCrunches;
+	var subtotalCloss = 1.5*((numDeaths*dmod)-(numKills*kmod)-(numAssists*amod))+ prevCrunches;
 	
 	if(win)
 	{
-		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*3)-(numKills*2)-(numAssists));
-		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*3)-(numKills*2)-(numAssists));		
-	}
-	if(!win)
-	{
-		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*((numDeaths*3)-(numKills*2)-(numAssists));
-		document.getElementById("crunches").innerHTML = "Crunches: " +1.5*((numDeaths*3)-(numKills*2)-(numAssists));		
-	}
-}
-
-function displayLeagueInfo()
-{
-	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" +
-			numDeaths + "\nNum assists: " + numAssists);
-	
-	if(win)
-	{
-		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*5)-(numKills*2)-(numAssists));
-		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*5)-(numKills*2)-(numAssists));		
+		document.getElementById("pushups").innerHTML = "Pushups: " +subtotalP;
+		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalCwin	+ ", including " + prevCrunches + " from previous games.";		
 	}
 	
 	if(!win)
 	{
-		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*((numDeaths*5)-(numKills*2)-(numAssists));
-		document.getElementById("crunches").innerHTML = "Crunches: " + 1.5*((numDeaths*5)-(numKills*2)-(numAssists));		
+		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*subtotalP;
+		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalCloss + ", including " + prevCrunches + " from previous games.";		
 	}
-}
+}//end displayInfo
 
-function displayLeagueInfoHard()
+function displayChamp(id)
 {
-	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" +
-			numDeaths + "\nNum assists: " + numAssists);
-	
-	if(win)
-	{
-		document.getElementById("pushups").innerHTML = "Pushups: " +((numDeaths*5)-(numKills)-(numAssists));
-		document.getElementById("crunches").innerHTML = "Crunches: " +((numDeaths*5)-(numKills)-(numAssists));		
-	}
-	
-	if(!win)
-	{
-		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*((numDeaths*5)-(numKills*1)-(numAssists));
-		document.getElementById("crunches").innerHTML = "Crunches: " +1.5*((numDeaths*5)-(numKills*1)-(numAssists));		
-	}
-}
-
-function displayChamp()
-{
-	
-}
+	var champclient = new XMLHttpRequest();
+	var champURL = urlBase + "api/lol/static-data/na/v1.2/champion/" + id+ key;
+	champclient.open("GET", champURL, false);
+	champclient.send();
+	var strJSON = champclient.responseText;
+	var temp = JSON.parse(strJSON);
+	var name = temp.name
+	document.getElementById("champImage").setAttribute("src","http://ddragon.leagueoflegends.com/cdn/3.15.5/img/champion/" + name + ".png");
+	document.getElementById("champImage").setAttribute("title",name);
+}//end displayChamp

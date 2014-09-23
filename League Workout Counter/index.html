@@ -4,12 +4,16 @@
  	<script src="GetLeagueInfo.js"></script>
  <body onload="getLeagueInfo()">
  	
- 	<button onclick= "displayLeagueInfoSoft()"> Feelin' weak today?</button>
+ 	<button id="soft", onclick= "displayLeagueInfoSoft()"> Feelin' weak today?</button>
  	
- 	<button onclick= "displayLeagueInfo()"> Back on the grind</button>
+ 	<button id="med", onclick= "displayLeagueInfo()"> Back on the grind</button>
  	
- 	<button onclick= "displayLeagueInfoHard()"> Really? Good for you!</button>
+ 	<button id="hard", onclick= "displayLeagueInfoHard()"> Really? Good for you!</button>
+ 	
+
  	<p id="text"> Click the button above to get your info</p>
+ 	
+ 	<img id = "champImage"></img>
  	
  	<p id="pushups"> </p>
  	<p id="crunches"> </p>
