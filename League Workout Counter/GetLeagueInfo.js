@@ -152,21 +152,20 @@ function displayInfo(dmod,kmod,amod)
 	checkPreviousGames(1,dmod,kmod,amod);
 	
 	var subtotalP = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod);
-	var subtotalCwin = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod)+ prevCrunches;
-	var subtotalCloss = 1.5*((numDeaths*dmod)-(numKills*kmod)-(numAssists*amod))+ prevCrunches;
+	var subtotalC = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod)+ prevCrunches;
 	
 	if(win)
 	{
 		document.getElementById("win").innerHTML = "You won! Nice!";
 		document.getElementById("pushups").innerHTML = "Pushups: " +subtotalP;
-		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalCwin	+ ", including " + prevCrunches + " from previous games.";		
+		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalC	+ ", including " + prevCrunches + " from previous games.";		
 	}
 	
 	if(!win)
 	{
 		document.getElementById("win").innerHTML = "Tough luck... Maybe you'll win the next one!";
 		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*subtotalP;
-		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalCloss + ", including " + prevCrunches + " from previous games.";		
+		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalC + ", including " + prevCrunches + " from previous games.";		
 	}
 }//end displayInfo
 
