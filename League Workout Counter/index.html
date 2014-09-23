@@ -2,7 +2,9 @@
  	
  	<script src="jquery.js"></script>
  	<script src="GetLeagueInfo.js"></script>
- <body onload = "init()">
+ 	<head> <link rel="stylesheet" href="myStyle.css"> </head><!--  picture from http://hdhqimg.com/images/wallpaper-7/league-of-legends-wallpaper-1920x1080-riven-widescreen-2.png -->
+ <body onload = "init()" >
+ <center>
  
  	<form onkeypress="return event.keyCode != 13"> Summoner Name: <input type = "text" id = "summonerName" placeholder = "Type your summoner name here" style ="width:200px" autofocus></form>
 	<br>
@@ -16,9 +18,11 @@
  	
  	<img id = "champImage" ></img>
  	
+ 	<p id="win"> </p>
  	<p id="pushups"> </p>
  	<p id="crunches"> </p>
  
+ </center>
  </body>
  
  </html>

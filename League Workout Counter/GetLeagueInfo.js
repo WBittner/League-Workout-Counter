@@ -19,7 +19,6 @@ var win = true;
 var champID = 0;
 var date;
 var prevCrunches;
-var champs = [""]
 	
 
 
@@ -39,7 +38,8 @@ function init()
 	    if (e.keyCode == 13)  {
 	        document.getElementById("med").click(); 	    }
 	}
-}
+}//end init
+
 function getLeagueInfo()
 {
 	summonerName = document.getElementById("summonerName").value;
@@ -89,6 +89,8 @@ function getLeagueInfo()
 	displayChamp(champID);
 }//end getLeagueInfo
 
+//edits the JSON string so that I can parse it for all summoners, not just those that I know the summoner name of
+//by changing their name to "ThisRightHereSummonerName" - something i dont expect to find anywhere else
 function fixJSONString(string)
 {
 	var temp = string;
@@ -99,7 +101,7 @@ function fixJSONString(string)
 	temp = string.substring(0,start) + "ThisRightHereSummonerName" + string.substring(end+start);
 	
 	return temp;
-}
+}//end fixJSONString
 
 //checks for any previous games on the same day, then adds their total crunches to the variable prevCrunches
 function checkPreviousGames(prevGameTotal,dmod,kmod,amod)
@@ -155,12 +157,14 @@ function displayInfo(dmod,kmod,amod)
 	
 	if(win)
 	{
+		document.getElementById("win").innerHTML = "You won! Nice!";
 		document.getElementById("pushups").innerHTML = "Pushups: " +subtotalP;
 		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalCwin	+ ", including " + prevCrunches + " from previous games.";		
 	}
 	
 	if(!win)
 	{
+		document.getElementById("win").innerHTML = "Tough luck... Maybe you'll win the next one!";
 		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*subtotalP;
 		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalCloss + ", including " + prevCrunches + " from previous games.";		
 	}
