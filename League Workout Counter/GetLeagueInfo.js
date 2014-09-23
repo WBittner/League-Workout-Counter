@@ -25,9 +25,9 @@ var prevCrunches;
 function init()
 {
 	//set onclick for the buttons to display 
-	document.getElementById("soft").setAttribute("onclick", "getLeagueInfo();displayInfo(3,2,1)");
-	document.getElementById("med").setAttribute("onclick", "getLeagueInfo();displayInfo(5,2,1)");
-	document.getElementById("hard").setAttribute("onclick", "getLeagueInfo();displayInfo(5,1,1)");
+	document.getElementById("soft").setAttribute("onclick", "adjustButtons(this);getLeagueInfo();displayInfo(3,2,1)");
+	document.getElementById("med").setAttribute("onclick", "adjustButtons(this);getLeagueInfo();displayInfo(5,2,1)");
+	document.getElementById("hard").setAttribute("onclick", "adjustButtons(this);getLeagueInfo();displayInfo(5,1,1)");
 	
 	//set enter to auto med
 	document.onkeypress = processKey;
@@ -39,6 +39,16 @@ function init()
 	        document.getElementById("med").click(); 	    }
 	}
 }//end init
+
+//changes class of button to change color through css so you know which one you picked
+function adjustButtons(button)
+{
+	var array = document.getElementsByTagName("input");
+	for(var s = 0; s<array.length; s++)
+		if(array[s].type == "button")
+			array[s].setAttribute("class","button");
+	button.setAttribute("class","clickedButton");
+}//end adjustButtons
 
 function getLeagueInfo()
 {
@@ -153,6 +163,12 @@ function displayInfo(dmod,kmod,amod)
 	
 	var subtotalP = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod);
 	var subtotalC = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod)+ prevCrunches;
+	
+	//negative pushups/crunches just seems awkward. Besides, reverse crunches are hard.
+	if(subtotalP<0)
+		subtotalP = 0;
+	if(subtotalC<0)
+		subtotalC = 0;
 	
 	if(win)
 	{

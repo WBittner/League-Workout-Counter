@@ -9,3 +9,7 @@ body {
 html {
 	height:100%;
 }
+
+.clickedButton {
+	background-color: 647D6D;
+}
