@@ -21,9 +21,28 @@ var date;
 var prevCrunches;
 var champs = [""]
 	
+
+
+function init()
+{
+	//set onclick for the buttons to display 
+	document.getElementById("soft").setAttribute("onclick", "getLeagueInfo();displayInfo(3,2,1)");
+	document.getElementById("med").setAttribute("onclick", "getLeagueInfo();displayInfo(5,2,1)");
+	document.getElementById("hard").setAttribute("onclick", "getLeagueInfo();displayInfo(5,1,1)");
+	
+	//set enter to auto med
+	document.onkeypress = processKey;
+	function processKey(e)
+	{
+	    if (null == e)
+	        e = window.event ;
+	    if (e.keyCode == 13)  {
+	        document.getElementById("med").click(); 	    }
+	}
+}
 function getLeagueInfo()
 {
-	summonerName = "si1v3r";
+	summonerName = document.getElementById("summonerName").value;
 	
 	var fullURL = urlBase + moreBase+ region + version + "summoner/by-name/" + summonerName + key;
 	//access API for summoner info 
@@ -37,8 +56,13 @@ function getLeagueInfo()
 	if(client.status==200){
 		//get id
 		var strJSON = client.responseText;
+		//change string so we can find stuff - cant change summoner name D:
+		strJSON = fixJSONString(strJSON);
+		
 		var temp = JSON.parse(strJSON);
-		id = temp.si1v3r.id;
+		id = temp.ThisRightHereSummonerName.id;
+		
+
 		
 		//use ID for match history
 		mhURL = urlBase + moreBase + region + mhversion + "game/by-summoner/" + id + "/recent" + key;
@@ -59,14 +83,23 @@ function getLeagueInfo()
 	else//incase the API status is bad
 		document.getElementById("text").innerHTML = nope;
 	
-	//set onclick for the buttons to display 
-	document.getElementById("soft").setAttribute("onclick", "displayInfo(3,2,1)");
-	document.getElementById("med").setAttribute("onclick", "displayInfo(5,2,1)");
-	document.getElementById("hard").setAttribute("onclick", "displayInfo(5,1,1)");
+
 	
 	//display pic of most recent games champ
 	displayChamp(champID);
 }//end getLeagueInfo
+
+function fixJSONString(string)
+{
+	var temp = string;
+	var start = temp.indexOf('"')+1;
+	temp = temp.substring(start);
+	var end = temp.indexOf('"');
+	temp = temp.substring(0,end);
+	temp = string.substring(0,start) + "ThisRightHereSummonerName" + string.substring(end+start);
+	
+	return temp;
+}
 
 //checks for any previous games on the same day, then adds their total crunches to the variable prevCrunches
 function checkPreviousGames(prevGameTotal,dmod,kmod,amod)
