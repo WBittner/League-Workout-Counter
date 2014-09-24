@@ -94,6 +94,12 @@ function getLeagueInfo()
 		document.getElementById("text").innerHTML = nope;
 	
 
+	if(numDeaths === undefined)
+		numKills = 0;
+	if(numKills === undefined)
+		numKills = 0;
+	if(numAssists === undefined)
+		numKills = 0;
 	
 	//display pic of most recent games champ
 	displayChamp(champID);
@@ -136,6 +142,13 @@ function checkPreviousGames(prevGameTotal,dmod,kmod,amod)
 		tnumKills =temp.games[prevGameTotal].stats.championsKilled;
 		tnumAssists =temp.games[prevGameTotal].stats.assists;
 		
+		if(tnumDeaths === undefined)
+			tnumKills = 0;
+		if(tnumKills === undefined)
+			tnumKills = 0;
+		if(tnumAssists === undefined)
+			tnumKills = 0;
+		
 		//we don't want to subtract crunches if its negative - no backsies!
 		var subtotal = tnumDeaths*dmod -tnumKills*kmod - tnumAssists*amod;
 		if(subtotal>0)
@@ -155,6 +168,7 @@ function EMtoMD(t)
 }//end EMtoMD
 
 //displays the number of pushups/crunches you must do, as well as your most recent games date and KDA
+//todo:fix crunches so neg are taken out before prev added
 function displayInfo(dmod,kmod,amod)
 {
 	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" + numDeaths + "\nNum assists: " + numAssists);
