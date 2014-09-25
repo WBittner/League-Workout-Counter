@@ -1,4 +1,4 @@
-/**
+/** 
  * Javascript to access League of Legends API
  * Written by William Bittner
  */
@@ -119,41 +119,42 @@ function fixJSONString(string)
 	return temp;
 }//end fixJSONString
 
-//checks for any previous games on the same day, then adds their total crunches to the variable prevCrunches
+//checks for any previous games on the same day, then adds their total crunches to the variable prevCrunches recursively
 function checkPreviousGames(prevGameTotal,dmod,kmod,amod)
 {
-	prevCrunches = 0;
 	var mhclient = new XMLHttpRequest();
 	mhclient.open("GET", mhURL, false);
 	mhclient.send();
-	var strJSON = mhclient.responseText;
-	var temp = JSON.parse(strJSON);
+	var strJSON2 = mhclient.responseText;
+	var temp = JSON.parse(strJSON2);
 	var gameDate = EMtoMD(temp.games[prevGameTotal].createDate);
-	
-	//base case - if the game doesn't equal the most recent games date we're done!
-	if(gameDate!=date)
+
+	//base case - if the date doesn't equal the most recent games date we're done!
+	if(date!=gameDate)
 		return;
 	else
 	{
-		var tnumDeaths = 0;
-		var tnumKills = 0;
-		var tnumAssists = 0;
-		tnumDeaths =temp.games[prevGameTotal].stats.numDeaths;
-		tnumKills =temp.games[prevGameTotal].stats.championsKilled;
-		tnumAssists =temp.games[prevGameTotal].stats.assists;
-		
-		if(tnumDeaths === undefined)
-			tnumKills = 0;
-		if(tnumKills === undefined)
-			tnumKills = 0;
-		if(tnumAssists === undefined)
-			tnumKills = 0;
-		
-		//we don't want to subtract crunches if its negative - no backsies!
-		var subtotal = tnumDeaths*dmod -tnumKills*kmod - tnumAssists*amod;
-		if(subtotal>0)
-			prevCrunches+= subtotal;
-		return;
+		if(temp.games[prevGameTotal].stats.win==false)
+		{		
+			var tnumDeaths = 0;
+			var tnumKills = 0;
+			var tnumAssists = 0;
+			tnumDeaths =temp.games[prevGameTotal].stats.numDeaths;
+			tnumKills =temp.games[prevGameTotal].stats.championsKilled;
+			tnumAssists =temp.games[prevGameTotal].stats.assists;
+
+			if(tnumDeaths === undefined)
+				tnumKills = 0;
+			if(tnumKills === undefined)
+				tnumKills = 0;
+			if(tnumAssists === undefined)
+				tnumKills = 0;
+			//we don't want to subtract crunches if its negative - no backsies!
+			var subtotal = tnumDeaths*dmod -tnumKills*kmod - tnumAssists*amod;
+			if(subtotal>0)
+				prevCrunches+= subtotal;
+		}
+		checkPreviousGames(++prevGameTotal,dmod,kmod,amod);
 	}
 }//end checkPreviousGames
 
@@ -173,6 +174,7 @@ function displayInfo(dmod,kmod,amod)
 {
 	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" + numDeaths + "\nNum assists: " + numAssists);
 	
+	prevCrunches = 0;
 	checkPreviousGames(1,dmod,kmod,amod);
 	
 	var subtotalP = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod);
