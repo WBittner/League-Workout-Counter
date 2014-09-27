@@ -29,7 +29,7 @@ function init()
 	document.getElementById("med").setAttribute("onclick", "adjustButtons(this);getLeagueInfo();displayInfo(5,2,1)");
 	document.getElementById("hard").setAttribute("onclick", "adjustButtons(this);getLeagueInfo();displayInfo(5,1,1)");
 	
-	//set enter to auto med
+	//set enter to auto click med
 	document.onkeypress = processKey;
 	function processKey(e)
 	{
@@ -131,7 +131,7 @@ function checkPreviousGames(prevGameTotal,dmod,kmod,amod)
 
 	//base case - if the date doesn't equal the most recent games date we're done!
 	if(date!=gameDate)
-		return;
+		return 0;
 	else
 	{
 		if(temp.games[prevGameTotal].stats.win==false)
@@ -154,7 +154,7 @@ function checkPreviousGames(prevGameTotal,dmod,kmod,amod)
 			if(subtotal>0)
 				prevCrunches+= subtotal;
 		}
-		checkPreviousGames(++prevGameTotal,dmod,kmod,amod);
+		return 1 + checkPreviousGames(++prevGameTotal,dmod,kmod,amod);
 	}
 }//end checkPreviousGames
 
@@ -175,7 +175,7 @@ function displayInfo(dmod,kmod,amod)
 	document.getElementById("text").innerHTML = ("On " + date + ":<br> Num kills: " +numKills +"\nNum deaths:" + numDeaths + "\nNum assists: " + numAssists);
 	
 	prevCrunches = 0;
-	checkPreviousGames(1,dmod,kmod,amod);
+	var numPrevGames = checkPreviousGames(1,dmod,kmod,amod);
 	
 	var subtotalP = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod);
 	var subtotalC = (numDeaths*dmod)-(numKills*kmod)-(numAssists*amod)+ prevCrunches;
@@ -185,19 +185,18 @@ function displayInfo(dmod,kmod,amod)
 		subtotalP = 0;
 	if(subtotalC<0)
 		subtotalC = 0;
-	
 	if(win)
 	{
 		document.getElementById("win").innerHTML = "You won! Nice!";
 		document.getElementById("pushups").innerHTML = "Pushups: " +subtotalP;
-		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalC	+ ", including " + prevCrunches + " from previous games.";		
+		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalC	+ ", including " + prevCrunches + " from " + numPrevGames + " previous game(s).";		
 	}
 	
 	if(!win)
 	{
 		document.getElementById("win").innerHTML = "Tough luck... Maybe you'll win the next one!";
 		document.getElementById("pushups").innerHTML = "Pushups: " + 1.5*subtotalP;
-		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalC + ", including " + prevCrunches + " from previous games.";		
+		document.getElementById("crunches").innerHTML = "Crunches: " + subtotalC + ", including " + prevCrunches + " from " + numPrevGames + " previous game(s).";		
 	}
 }//end displayInfo
 
@@ -210,6 +209,7 @@ function displayChamp(id)
 	var strJSON = champclient.responseText;
 	var temp = JSON.parse(strJSON);
 	var name = temp.name
-	document.getElementById("champImage").setAttribute("src","http://ddragon.leagueoflegends.com/cdn/3.15.5/img/champion/" + name + ".png");
+	document.getElementById("champImage").setAttribute("src","http://ddragon.leagueoflegends.com/cdn/4.16.1/img/champion/" + name + ".png");
 	document.getElementById("champImage").setAttribute("title",name);
+	document.getElementById("champImage").setAttribute("alt","I can't find the picture for " + name + ". Sorry mate.");
 }//end displayChamp
