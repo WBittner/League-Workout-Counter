@@ -208,8 +208,8 @@ function displayChamp(id)
 	champclient.send();
 	var strJSON = champclient.responseText;
 	var temp = JSON.parse(strJSON);
-	var name = temp.name
-	document.getElementById("champImage").setAttribute("src","http://ddragon.leagueoflegends.com/cdn/4.16.1/img/champion/" + name + ".png");
+	var name = temp.key;
+	document.getElementById("champImage").setAttribute("src","http://ddragon.leagueoflegends.com/cdn/5.12.1/img/champion/" + name + ".png");
 	document.getElementById("champImage").setAttribute("title",name);
 	document.getElementById("champImage").setAttribute("alt","I can't find the picture for " + name + ". Sorry mate.");
 }//end displayChamp
