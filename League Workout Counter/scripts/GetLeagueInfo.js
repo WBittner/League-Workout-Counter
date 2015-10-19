@@ -22,7 +22,7 @@ var prevCrunches;
 	
 
 
-function init()
+function initForm()
 {
 	//set onclick for the buttons to display 
 	document.getElementById("soft").setAttribute("onclick", "adjustButtons(this);getLeagueInfo();displayInfo(3,2,1)");

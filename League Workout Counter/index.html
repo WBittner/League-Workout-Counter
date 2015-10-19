@@ -1,29 +1,29 @@
  <html>
  	
  	<script src="jquery.js"></script>
- 	<script src="GetLeagueInfo.js"></script>
+ 	<script src="scripts/GetLeagueInfo.js"></script>
  	<title>I only tried to bait your ult, Fizz!</title>
  	<head> <link rel="stylesheet" href="myStyle.css"> </head><!--  picture from http://hdhqimg.com/images/wallpaper-7/league-of-legends-wallpaper-1920x1080-riven-widescreen-2.png -->
- <body onload = "init()" >
- <center>
- 
- 	<form onkeypress="return event.keyCode != 13"> Summoner Name: <input type = "text" id = "summonerName" placeholder = "Type your summoner name here" style ="width:200px" autofocus></form>
-	<br>
- 	 	
- 	<input type=button class=button id="soft" value="Feelin' weak today?"/>
- 	<input type=button class=button id="med" value="Back on the grind"/>
- 	<input type=button class=button id="hard" value="Really? Good for you!"/>
- 	
-	
- 	<p id="text"> Type your name then click the button above to get your info</p>	
- 	
- 	<img id = "champImage" ></img>
- 	
- 	<p id="win"> </p>
- 	<p id="pushups"> </p>
- 	<p id="crunches"> </p>
- 
- </center>
- </body>
+ 	<body onload = "initForm()" >
+		<center>
+		 
+		 	<form onkeypress="return event.keyCode != 13"> Summoner Name: <input type = "text" id = "summonerName" placeholder = "Type your summoner name here" style ="width:200px" autofocus></form>
+			<br>
+		 	 	
+		 	<input type=button class=button id="soft" value="Feelin' weak today?"/>
+		 	<input type=button class=button id="med" value="Back on the grind"/>
+		 	<input type=button class=button id="hard" value="Really? Good for you!"/>
+		 	
+			
+		 	<p id="text"> Type your name then click the button above to get your info</p>	
+		 	
+		 	<img id = "champImage" ></img>
+		 	
+		 	<p id="win"> </p>
+		 	<p id="pushups"> </p>
+		 	<p id="crunches"> </p>
+		 
+		 </center>
+ 	</body>
  
  </html>
