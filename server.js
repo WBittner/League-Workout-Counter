@@ -23,7 +23,7 @@ app.use(express.static('public')); //can now redirect to any static file in 'pub
 const workoutBuilder = require('./LeagueWorkoutBuilder');
 
 //Send it to meeee
-app.get('/getWorkout/id/:user', workoutBuilder);
+app.get('/getWorkout/id/:userName', workoutBuilder);
 
 
 
