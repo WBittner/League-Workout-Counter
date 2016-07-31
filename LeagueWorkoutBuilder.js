@@ -1,15 +1,15 @@
 /*
 *
-*	Entry point into workout building code.
+*	LeagueWorkoutBuilder.js - Entry point into workout building code.
 *
 */
 
-//const constants = require("./Constants.js");
 const rp = require("request-promise");
 const summonerIDOptionsGetter = require("./GetSummonerIdOptions.js");
 const matchHistoryOptionsGetter = require("./GetMatchHistoryOptions.js");
+const workoutBuilder = require("./WorkoutBuilder.js");
 
-module.exports = function (req, res) //this takes in nodeJS request and response as it will be directly called from app.get and will be directly outputting to frontend
+module.exports = function(req, res) //this takes in nodeJS request and response as it will be directly called from app.get and will be directly outputting to frontend
 {
 	const summonerName = req.params.userName.toLowerCase(); //toLowerCase...rip half hour of my life.
 
@@ -31,7 +31,10 @@ module.exports = function (req, res) //this takes in nodeJS request and response
     	.then(function(response)//matchHistory passed
     	{
     		const jsonMatchHistory = JSON.parse(response);
-    		res.send(jsonMatchHistory);
+
+			// Use match history to make a workout :)
+    		const workout = workoutBuilder(jsonMatchHistory);
+    		res.send(workout);
     	})
     	.catch(function(error)//matchHistory failed ):
     	{
@@ -48,11 +51,4 @@ module.exports = function (req, res) //this takes in nodeJS request and response
 
 		res.send({error:true});
 	})
-
-
-	// Use match history to make a workout :)
-	
-
-	//res.send to send a response 
-	//res.send("Received username: " + req.params.userName + ", ID: " + "uh..");
 }
