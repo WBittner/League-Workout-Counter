@@ -18,7 +18,7 @@ constants.URLS.ENDPOINTS = {};
 constants.URLS.ENDPOINTS.SUMMONER = "summoner/by-name/";
 constants.URLS.ENDPOINTS.GAME = "game/by-summoner/";
 constants.URLS.SUMMONER = constants.URLS.BASE + constants.VERSIONS.SUMMONER + "/" + constants.URLS.ENDPOINTS.SUMMONER + "%s" + constants.URLS.API_KEY;
-constants.URLS.GAME = constants.URLS.BASE + constants.VERSIONS.GAME +  + "/" + constants.URLS.ENDPOINTS.GAME + "%s/recent" + constants.URLS.API_KEY;
+constants.URLS.GAME = constants.URLS.BASE + constants.VERSIONS.GAME + "/" + constants.URLS.ENDPOINTS.GAME + "%s/recent" + constants.URLS.API_KEY;
 
 
 

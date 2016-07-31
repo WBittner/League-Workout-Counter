@@ -5,25 +5,50 @@
 */
 
 //const constants = require("./Constants.js");
-const summonerIDGetter = require("./GetSummonerId.js");
+const rp = require("request-promise");
+const summonerIDOptionsGetter = require("./GetSummonerIdOptions.js");
+const matchHistoryOptionsGetter = require("./GetMatchHistoryOptions.js");
 
-module.exports = function (req, res) //this takes in nodeJS request and response as it will be directly called from app.get
+module.exports = function (req, res) //this takes in nodeJS request and response as it will be directly called from app.get and will be directly outputting to frontend
 {
 	const summonerName = req.params.userName.toLowerCase(); //toLowerCase...rip half hour of my life.
 
-	//temp callback for testing summonerIDGetter functionality
-	var summonerNameCallback = function(id, URL)
+	// Construct initial request options. The rest will be constructed in the chain.
+	const summonerIDOptions = summonerIDOptionsGetter(summonerName);
+	
+
+	// Chain requests to start with summoner name and end with a match history json!
+	rp(summonerIDOptions)
+	.then(function(response)//summonerID passed
 	{
-		if(id!=-1)
-			res.send("Success: Received username: " + req.params.userName + ", ID: " + id );
-		else 
-			res.send("Error on backend: " + URL + ". Id: " + id);
-	};
+    	const jsonSummoner = JSON.parse(response);
+    	const id = jsonSummoner[summonerName].id;
 
-	// Take user name and turn it into summoner ID
-	summonerIDGetter(summonerName, summonerNameCallback);
+    	var matchHistoryOptions = matchHistoryOptionsGetter(id);
 
-	// Use summoner name to get match history
+    	//call match history with summoner id
+    	rp(matchHistoryOptions)
+    	.then(function(response)//matchHistory passed
+    	{
+    		const jsonMatchHistory = JSON.parse(response);
+    		res.send(jsonMatchHistory);
+    	})
+    	.catch(function(error)//matchHistory failed ):
+    	{
+			console.log("Error on mh...");
+			console.log(error);
+
+    		res.send({error:true});
+    	})
+	})
+	.catch(function(error)//summonerID failed ):
+	{	
+		console.log("Error on sid...");
+		console.log(error);
+
+		res.send({error:true});
+	})
+
 
 	// Use match history to make a workout :)
 	
