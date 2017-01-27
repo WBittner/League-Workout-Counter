@@ -11,8 +11,45 @@ module.exports = function(matchHistoryJSON)
 	//Get the KDA of last game and KDA of toadays losses.
 	const KDAs = getKDAs(todaysGames);
 
-	return KDAs;
+	//Build the workout!!
+	const workout = buildWorkout(KDAs);
+
+	const returnObj = {workout: workout, KDAs:KDAs};
+
+	return returnObj;
 }
+
+const WORKOUT_MODIFIER_ENUM = 
+{
+	DEATHS: 5, KILLS: -2, ASSISTS: -1
+}
+
+function buildWorkout(KDAs)
+{
+	//For right now, we will just use a base calculation and apply it to crunches/pushups. 
+	// Enhancement will be to add an options param to allow for other workouts (running/walking) and different difficulties
+	var workout = {};
+	var pushups = {name: "Pushups", count:0};
+	var crunches = {name: "Crunches", count:0};
+	workout.pushups = pushups;
+	workout.crunches = crunches;
+
+	//handle most recent game differently, as it should weigh the most - no sense in overpunishing one bad game in a day.
+	const lastGame = KDAs.lastGame;
+	var lastGameWorkoutCount = (lastGame.K * WORKOUT_MODIFIER_ENUM.KILLS) + (lastGame.D * WORKOUT_MODIFIER_ENUM.DEATHS) + (lastGame.A * WORKOUT_MODIFIER_ENUM.ASSISTS);
+	workout.pushups.count += lastGameWorkoutCount;
+	workout.crunches.count += lastGameWorkoutCount;
+
+	//only count crunches in the rest of the games
+	const remainingGames = KDAs.remainingGames;
+	var remainingGamesWorkoutCount = (remainingGames.K * WORKOUT_MODIFIER_ENUM.KILLS) + (remainingGames.D * WORKOUT_MODIFIER_ENUM.DEATHS) + (remainingGames.A * WORKOUT_MODIFIER_ENUM.ASSISTS);
+	//No reducing the count based on previous games!
+	remainingGamesWorkoutCount = remainingGamesWorkoutCount > 0 ? remainingGamesWorkoutCount : 0;
+	workout.crunches.count += remainingGamesWorkoutCount;
+
+	return workout;
+}
+
 
 function getKDAs(games)
 {
@@ -21,24 +58,23 @@ function getKDAs(games)
 
 	const lastGameStats = games.pop().stats; //games we added to the array from oldest to newest, so popping will give us the most recently played game
 	KDAs.lastGame = {};
-	KDAs.lastGame.won = lastGameStats.win;
 	KDAs.lastGame.K = lastGameStats.championsKilled;
 	KDAs.lastGame.D = lastGameStats.numDeaths;
 	KDAs.lastGame.A = lastGameStats.assists;
 
-	KDAs.otherGames = {};
-	KDAs.otherGames.K = 0;
-	KDAs.otherGames.D = 0;
-	KDAs.otherGames.A = 0;
+	KDAs.remainingGames = {};
+	KDAs.remainingGames.K = 0;
+	KDAs.remainingGames.D = 0;
+	KDAs.remainingGames.A = 0;
 
 	for(var i = 0; i < games.length; i++)
 	{
 		var gameStats = games[i].stats;
 		if(gameStats.win == false)
 		{
-			KDAs.otherGames.K += gameStats.championsKilled;
-			KDAs.otherGames.D += gameStats.numDeaths;
-			KDAs.otherGames.A += gameStats.assists;
+			KDAs.remainingGames.K += gameStats.championsKilled;
+			KDAs.remainingGames.D += gameStats.numDeaths;
+			KDAs.remainingGames.A += gameStats.assists;
 		}
 	}
 

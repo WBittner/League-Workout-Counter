@@ -38,16 +38,14 @@ module.exports = function(req, res) //this takes in nodeJS request and response 
     	})
     	.catch(function(error)//matchHistory failed ):
     	{
-			console.log("Error on mh...");
-			console.log(error);
+			console.log("Error on mh: ", error);
 
     		res.send({error:true});
     	})
 	})
 	.catch(function(error)//summonerID failed ):
 	{	
-		console.log("Error on sid...");
-		console.log(error);
+		console.log("Error on sid: ", error);
 
 		res.send({error:true});
 	})

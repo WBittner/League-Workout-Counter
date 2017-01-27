@@ -18,4 +18,5 @@ Flow of webapp for first release:
 
 Enhancements:
 1) Region
+2) EZ/med/hard mode
 2) Prettier...
