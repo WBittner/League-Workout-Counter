@@ -25,6 +25,7 @@ const workoutBuilder = require('./LeagueWorkoutBuilder');
 //Send it to meeee
 app.get('/getWorkout/id/:userName', workoutBuilder);
 
+app.get('/', (req, res) => res.redirect('/index.html'));
 
 
 app.listen(3000, function()

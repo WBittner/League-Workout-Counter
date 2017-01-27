@@ -4,7 +4,7 @@
 This project is in deep need of some love - We gonna do it right this time.
 
 * End Game:
-	* Front end - angular/html/js/css(require?)
+	* Front end - vue/html/js/css
 	* Back end - node.js
 
 
@@ -19,4 +19,10 @@ Flow of webapp for first release:
 Enhancements:
 1) Region
 2) EZ/med/hard mode
-2) Prettier...
+3) Prettier...
+	1) Vue for display 
+	2) We all like Riven, but probably should just pull the splash art or bigger picture for games. Can detect skin used? Random? 
+4) just send KDAs to front end and let user pick workout? 
+	1) Loop/iterate though exercises, infinitely expandable layout rather than 2 exercises hardcoded
+5) Get images going again
+	1) Integrate LOLDS first?
