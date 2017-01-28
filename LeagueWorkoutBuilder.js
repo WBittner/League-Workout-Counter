@@ -7,7 +7,9 @@
 const rp = require("request-promise");
 const summonerIDOptionsGetter = require("./GetSummonerIdOptions.js");
 const matchHistoryOptionsGetter = require("./GetMatchHistoryOptions.js");
+const championInfoOptionsGetter = require("./GetChampionInfoOptions.js");
 const workoutBuilder = require("./WorkoutBuilder.js");
+const constants = require("./Constants.js");
 
 module.exports = function(req, res) //this takes in nodeJS request and response as it will be directly called from app.get and will be directly outputting to frontend
 {
@@ -34,7 +36,16 @@ module.exports = function(req, res) //this takes in nodeJS request and response 
 
 			// Use match history to make a workout :)
     		const workout = workoutBuilder(jsonMatchHistory);
-    		res.send(workout);
+
+			rp(championInfoOptionsGetter(workout.stats.lastGame.championId))
+			.then(function(response) {
+				workout.stats.lastGame.championIconURL = constants.URLS.DDIcon.replace("%s",JSON.parse(response).key);
+				res.send(workout);
+			})
+			.catch(function(error) {//champ info failed
+				console.log("Error on champ info: ", error);
+				res.send({error:true});
+			})
     	})
     	.catch(function(error)//matchHistory failed ):
     	{

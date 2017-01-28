@@ -60,8 +60,9 @@ function getStats(games)
 	//Return Stats from the last game and the summation KDA of all games lost
 	var stats = {};
 
-	const lastGameStats = games.pop().stats; //games we added to the array from oldest to newest, so popping will give us the most recently played game
-	
+	const lastGame = games.pop(); //games we added to the array from oldest to newest, so popping will give us the most recently played game
+	const lastGameStats = lastGame.stats;
+
 	stats.lastGame = {};
 	stats.lastGame.K = lastGameStats.championsKilled;
 	stats.lastGame.D = lastGameStats.numDeaths;
@@ -70,6 +71,8 @@ function getStats(games)
 	stats.lastGame.won = {};
 	stats.lastGame.won.name = "Won";
 	stats.lastGame.won.value = lastGameStats.win
+
+	stats.lastGame.championId = lastGame.championId;
 
 	stats.remainingGames = {};
 	stats.remainingGames.K = 0;

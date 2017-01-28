@@ -9,6 +9,7 @@ var App = new Vue ({
         won: "",
         exercise1: "",
         exercise2: "",
+        champImageSrc: "",
         ready: false
     },
     methods: {
@@ -20,7 +21,7 @@ var App = new Vue ({
                 type: 'GET',
                 error: this.restError,
                 success: this.restSuccess
-		    }); 
+            }); 
         },
         restSuccess: function(data) {
             console.log("Success: ", data);
@@ -28,6 +29,7 @@ var App = new Vue ({
                 this.won = this.getLabelAndValueString(data.stats.lastGame.won);
                 this.exercise1 = this.getLabelAndValueString(data.workout.crunches);
                 this.exercise2 = this.getLabelAndValueString(data.workout.pushups);
+                this.champImageSrc = data.stats.lastGame.championIconURL;
                 this.ready = true;
             }
             else {
