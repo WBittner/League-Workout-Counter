@@ -1,0 +1,20 @@
+{
+  "name": "league_workout_counter",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "nodemon": "^1.11.0",
+    "request": "^2.74.0",
+    "request-promise": "^4.1.0",
+    "vue": "^2.1.10"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "William Bittner",
+  "license": "ISC"
+}

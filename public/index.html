@@ -1,0 +1,29 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><!-- Get jquery from google, no need to download... -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+<title>I only tried to bait your ult, Fizz!</title>
+<div id="app">
+	<head> <link rel="stylesheet" href="myStyle.css"> </head><!--  picture from http://hdhqimg.com/images/wallpaper-7/league-of-legends-wallpaper-1920x1080-riven-widescreen-2.png -->
+	<body>
+		<center>
+			Summoner Name: 
+			<input v-model="name" @keyup.enter="getKDAs('regular')" placeholder = "Type your summoner name here" style ="width:200px" autofocus/>
+			<br><br><br>
+			
+			<button id="weak" v-on:click="getKDAs('weak')"/>Feelin' weak today?</button>
+			<button id="regular" v-on:click="getKDAs('regular')"/>Back on the grind</button>
+			<button id="strong" v-on:click="getKDAs('strong')"/>Really? Good for you!</button>
+			
+			
+			<p id="text">{{ infoText }}</p>	
+			
+			<img v-if="ready" v-bind:src="champImageSrc"></img>
+			
+			<p v-if="ready">{{ won }}</p>
+			<p v-if="ready">{{ exercise1 }}</p>
+			<p v-if="ready">{{ exercise2 }}</p>
+			
+			</center>
+	<script src="app.js"></script>
+	</body>
+</div>
