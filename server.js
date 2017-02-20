@@ -1,20 +1,3 @@
-/*********************************
-Hello world!
-const http = require('http');
-
-const hostname = '127.0.0.1';
-const port = 3000;
-
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World\n');
-});
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
-***********************************/
 //REST services!!
 const express = require('express');
 const app = express();
@@ -24,9 +7,6 @@ const workoutBuilder = require('./LeagueWorkoutBuilder');
 
 //Send it to meeee
 app.get('/getWorkout/id/:userName', workoutBuilder);
-
-app.get('/', (req, res) => res.redirect('/index.html'));
-
 
 app.listen(3000, function()
 {

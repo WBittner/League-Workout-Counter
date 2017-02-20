@@ -3,6 +3,7 @@
 *	WorkoutBuilder.js - This file will take in a match history and build a workout from it.
 *
 */
+
 module.exports = function(matchHistoryJSON)
 {
 	//Grab all the games from the day of the last match
@@ -10,6 +11,7 @@ module.exports = function(matchHistoryJSON)
 
 	//Get the KDA of last game and KDA of toadays losses.
 	const stats = getStats(todaysGames);
+	stats.lastGame.championIconURL = matchHistoryJSON.championIconURL;
 
 	//Build the workout!!
 	const workout = buildWorkout(stats);

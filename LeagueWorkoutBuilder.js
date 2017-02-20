@@ -4,60 +4,16 @@
 *
 */
 
-const rp = require("request-promise");
-const summonerIDOptionsGetter = require("./GetSummonerIdOptions.js");
-const matchHistoryOptionsGetter = require("./GetMatchHistoryOptions.js");
-const championInfoOptionsGetter = require("./GetChampionInfoOptions.js");
+const leagueStatsGetter = require("./LeagueStatsGetter");
 const workoutBuilder = require("./WorkoutBuilder.js");
-const constants = require("./Constants.js");
 
 module.exports = function(req, res) //this takes in nodeJS request and response as it will be directly called from app.get and will be directly outputting to frontend
 {
-	const summonerName = req.params.userName.toLowerCase(); //toLowerCase...rip half hour of my life.
-
-	// Construct initial request options. The rest will be constructed in the chain.
-	const summonerIDOptions = summonerIDOptionsGetter(summonerName);
-	
-
-	// Chain requests to start with summoner name and end with a match history json!
-	rp(summonerIDOptions)
-	.then(function(response)//summonerID passed
-	{
-    	const jsonSummoner = JSON.parse(response);
-    	const id = jsonSummoner[summonerName].id;
-
-    	var matchHistoryOptions = matchHistoryOptionsGetter(id);
-
-    	//call match history with summoner id
-    	rp(matchHistoryOptions)
-    	.then(function(response)//matchHistory passed
-    	{
-    		const jsonMatchHistory = JSON.parse(response);
-
-			// Use match history to make a workout :)
-    		const workout = workoutBuilder(jsonMatchHistory);
-
-			rp(championInfoOptionsGetter(workout.stats.lastGame.championId))
-			.then(function(response) {
-				workout.stats.lastGame.championIconURL = constants.URLS.DDIcon.replace("%s",JSON.parse(response).key);
-				res.send(workout);
-			})
-			.catch(function(error) {//champ info failed
-				console.log("Error on champ info: ", error);
-				res.send({error:true});
-			})
-    	})
-    	.catch(function(error)//matchHistory failed ):
-    	{
-			console.log("Error on mh: ", error);
-
-    		res.send({error:true});
-    	})
-	})
-	.catch(function(error)//summonerID failed ):
-	{	
-		console.log("Error on sid: ", error);
-
-		res.send({error:true});
-	})
+	leagueStatsGetter.getMatchHistoryWithIconFromSummonerName(req.params.userName)
+		.then(workoutBuilder)
+		.then(res.send.bind(res))
+        .catch(function(error)
+        {
+            res.send({error:true, value: error});
+        });
 }

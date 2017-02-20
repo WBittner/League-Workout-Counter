@@ -12,6 +12,7 @@ constants.VERSIONS.SUMMONER = "v1.4";
 constants.VERSIONS.GAME = "v1.3";
 constants.VERSIONS.STATIC = "v1.2";
 
+// TODO: Please... there has to be a better way...
 constants.URLS = {};
 constants.URLS.BASE = "https://na.api.pvp.net/api/lol/na/";
 constants.URLS.API_KEY = "?api_key=" + constants.API_KEY;
@@ -24,7 +25,5 @@ constants.URLS.GAME = constants.URLS.BASE + constants.VERSIONS.GAME + "/" + cons
 constants.URLS.CHAMPION = "https://global.api.pvp.net/api/lol/static-data/na/v1.2/champion/%s" + constants.URLS.API_KEY; 
 
 constants.URLS.DDIcon = "http://ddragon.leagueoflegends.com/cdn/7.1.1/img/champion/%s.png"
-
-
 
 module.exports = constants;
