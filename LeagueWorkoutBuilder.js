@@ -1,19 +1,29 @@
 /*
-*
 *	LeagueWorkoutBuilder.js - Entry point into workout building code.
-*
 */
 
-const leagueStatsGetter = require("./LeagueStatsGetter");
-const workoutBuilder = require("./WorkoutBuilder.js");
+const getMatchHistoryWithIconFromSummonerName = require("./LeagueStatsGetter").getMatchHistoryWithIconFromSummonerName;
+const transformLeagueStats = require("./LeagueStatsTransformer").transformLeagueStats;
+const getWorkoutFactory = require("./WorkoutCalculatorFactory").getWorkoutFactory;
 
-module.exports = function(req, res) //this takes in nodeJS request and response as it will be directly called from app.get and will be directly outputting to frontend
-{
-	leagueStatsGetter.getMatchHistoryWithIconFromSummonerName(req.params.userName)
-		.then(workoutBuilder)
-		.then(res.send.bind(res))
-        .catch(function(error)
-        {
-            res.send({error:true, value: error});
-        });
-}
+module.exports =  {
+    buildLeagueWorkout(req, res) {
+        getMatchHistoryWithIconFromSummonerName(req.params.userName)
+            .then(function(matchHistoryWithIconFromSummonerName) {
+                let response = {
+                    championIconURL: matchHistoryWithIconFromSummonerName.championIconURL,
+                    stats: transformLeagueStats(matchHistoryWithIconFromSummonerName)
+                };
+
+                response.workout = getWorkoutFactory(JSON.parse(req.params.workout)).calculateWorkout(response.stats.KDAs);
+
+                return response;
+            })
+            .then(res.send.bind(res))
+            .catch(function(error)
+            {
+                console.log(error);
+                res.send({error:true, value: error});
+            });
+    }
+};

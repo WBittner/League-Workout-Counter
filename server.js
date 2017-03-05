@@ -3,10 +3,10 @@ const express = require('express');
 const app = express();
 app.use(express.static('public')); //can now redirect to any static file in 'public' subdir!
 
-const workoutBuilder = require('./LeagueWorkoutBuilder');
+const workoutBuilder = require('./LeagueWorkoutBuilder').buildLeagueWorkout;
 
 //Send it to meeee
-app.get('/getWorkout/id/:userName', workoutBuilder);
+app.get('/getWorkout/userName/:userName/workout/:workout', workoutBuilder);
 
 app.listen(3000, function()
 {

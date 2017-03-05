@@ -3,27 +3,25 @@
 
 <title>I only tried to bait your ult, Fizz!</title>
 <div id="app">
-	<head> <link rel="stylesheet" href="myStyle.css"> </head><!--  picture from http://hdhqimg.com/images/wallpaper-7/league-of-legends-wallpaper-1920x1080-riven-widescreen-2.png -->
+    <!--  picture from http://hdhqimg.com/images/wallpaper-7/league-of-legends-wallpaper-1920x1080-riven-widescreen-2.png -->
+	<head> <link rel="stylesheet" href="myStyle.css"> </head>
 	<body>
 		<center>
 			Summoner Name: 
-			<input v-model="name" @keyup.enter="getKDAs('regular')" placeholder = "Type your summoner name here" style ="width:200px" autofocus/>
+			<input v-model="name" @keyup.enter="getKDAs('regular', ['Pushups', 'Crunches'])"
+                   placeholder="Type your summoner name here" style ="width:200px" autofocus/>
+
 			<br><br><br>
-			
-			<button id="weak" v-on:click="getKDAs('weak')"/>Feelin' weak today?</button>
-			<button id="regular" v-on:click="getKDAs('regular')"/>Back on the grind</button>
-			<button id="strong" v-on:click="getKDAs('strong')"/>Really? Good for you!</button>
-			
+
+			<button id="regular" v-on:click="getKDAs('regular', ['Pushups', 'Crunches'])"/>Back on the grind</button>
 			
 			<p id="text">{{ infoText }}</p>	
 			
 			<img v-if="ready" v-bind:src="champImageSrc"></img>
+
+			<p v-if="ready" v-for="info in displayInfo">{{ (info.name ? info.name + ": " : "") + info.value }}</p>
 			
-			<p v-if="ready">{{ won }}</p>
-			<p v-if="ready">{{ exercise1 }}</p>
-			<p v-if="ready">{{ exercise2 }}</p>
-			
-			</center>
+		</center>
 	<script src="app.js"></script>
 	</body>
 </div>

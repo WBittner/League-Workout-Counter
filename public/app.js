@@ -6,30 +6,33 @@ var App = new Vue ({
     data: {
         name: "",
         infoText: "Type your name then click the button above to get your info",
-        won: "",
-        exercise1: "",
-        exercise2: "",
+        displayInfo: [],
         champImageSrc: "",
         ready: false
     },
     methods: {
-        getKDAs: function(level) {
-            this.infoText="Fetching KDAs for " + this.name + ", goin' " + level;
+        getKDAs: function(level, workout) {
+            this.ready = false;
+            this.infoText="Fetching KDAs for " + this.name;
 
             $.ajax({
-                url: "http://localhost:3000/getWorkout/id/" + this.name,
+                url: "http://localhost:3000/getWorkout/userName/" + this.name + "/workout/" + JSON.stringify(workout),
                 type: 'GET',
                 error: this.restError,
                 success: this.restSuccess
-            }); 
+            });
         },
         restSuccess: function(data) {
-            console.log("Success: ", data);
             if(!data.error) {
-                this.won = this.getLabelAndValueString(data.stats.lastGame.won);
-                this.exercise1 = this.getLabelAndValueString(data.workout.crunches);
-                this.exercise2 = this.getLabelAndValueString(data.workout.pushups);
-                this.champImageSrc = data.stats.lastGame.championIconURL;
+                this.displayInfo = [];
+
+                this.displayInfo.push({
+                    value: data.stats.Won ? "You won, good job!" : "You'll get 'em next time ):"
+                });
+
+                this.recursivelyAddToDisplayInfo(data.stats.KDAs.lastGameKDA);
+                this.recursivelyAddToDisplayInfo(data.workout);
+                this.champImageSrc = data.championIconURL;
                 this.ready = true;
             }
             else {
@@ -38,8 +41,17 @@ var App = new Vue ({
                 this.ready = true;
             }
         },
-        getLabelAndValueString: function(workout) {
-            return workout.name + ": " + workout.value;
+        recursivelyAddToDisplayInfo: function(rootObject, namePrefix) {
+            for(var info in rootObject) {
+                if(typeof rootObject[info] !== "object") {
+                    this.displayInfo.push({
+                        name: info + (namePrefix ? " (" + namePrefix + ")" : ""),
+                        value: rootObject[info]
+                    });
+                } else {
+                    this.recursivelyAddToDisplayInfo(rootObject[info], info);
+                }
+            }
         },
         restError: function(error) {
             console.log("Error:", error);
